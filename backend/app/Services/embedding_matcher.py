@@ -2,7 +2,13 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 #Load pre-trained model
-model = SentenceTransformer("all-MiniLM-L6-v2")
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+    return model
 
 
 #Adding a Chunking Helper
@@ -26,8 +32,8 @@ def compute_similarity(resume: str, jd: str):
     jd_chunks = chunk_text(jd)
 
     
-    resume_embedding = model.encode(resume_chunks)
-    jd_embedding = model.encode(jd_chunks)
+    resume_embedding = get_model().encode(resume_chunks)
+    jd_embedding = get_model().encode(jd_chunks)
 
     #Calculate Cosine Similarity
     similarity_matrix= cosine_similarity(resume_embedding, jd_embedding)
@@ -56,8 +62,8 @@ def semantic_skill_match(resume_skills, jd_skills, threshold: float = 0.65):
     resume_skills = list(resume_skills)
     jd_skills = list(jd_skills)
 
-    resume_skills_embedding = model.encode(resume_skills)
-    jd_skills_embedding = model.encode(jd_skills)
+    resume_skills_embedding = get_model().encode(resume_skills)
+    jd_skills_embedding = get_model().encode(jd_skills)
 
     similarity_matrix_skills = cosine_similarity(resume_skills_embedding, jd_skills_embedding)
 
