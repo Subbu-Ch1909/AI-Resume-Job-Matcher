@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AI Resume Matcher</title>
+    </head>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container{
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius:10px;
+        }
+
+        button{
+            background-color: rgb(102, 195, 226);
+            color: white;
+            border: none;
+            padding:12px, 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover{
+            background-color: #1d4ed8;
+        }
+
+        text area{
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-sizing: border-box
+        }
+
+        input[type="file"]{
+            margin-top: 8px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        #results {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 8px;
+            line-height: 1.6;
+
+        }
+
+        ul{
+            padding-left: 20px;
+        }
+
+        li{
+            margin-bottom: 6px;
+        }
+    </style>
+    <body>
+        <div class="container">
+
+            <h1>AI Resume Matcher</h1>
+
+            <p>Upload your resuem PDF and Paste a job description to get a match analysis.</p>
+
+            <label>Upload Resume (PDF):</label>
+            <br><br>
+
+            <input type="file" id="resumeFile" accept=".pdf">
+            <br><br>
+
+            <label>Job Description:</label>
+
+            <br>
+
+            <textarea id="jobDescription" rows="10" cols="80"></textarea>
+
+            <br><br>
+
+            <button id="analyzeButton">Analyze Resume</button>
+            <br><br>
+
+            <h2>Results</h2>
+
+            <div id="results">
+            Results will appear here...
+            </div>
+        </div>
+
+        <script>
+            const analyzeButton = document.getElementById("analyzeButton");
+
+            analyzeButton.addEventListener("click", function(){
+                const resumeFile = document.getElementById("resumeFile").files[0];
+                const jobDescription = document.getElementById("jobDescription").value;
+                const resultsDiv = document.getElementById("results");
+
+
+                if(!resumeFile){
+                    alert("Please upload resume PDF first.");
+                    return;
+                }
+                if(!jobDescription.trim()){
+                    alert("Please paste a job description.");
+                    return;
+                }
+                
+                const formData = new FormData()
+
+                formData.append("resume_file", resumeFile);
+                formData.append("job_description", jobDescription);
+
+                resultsDiv.innerHTML = "Please wait while the AI evaluates your resume."
+
+                analyzeButton.disabled = true;
+                analyzeButton.textContent = "Analyzing...";
+                
+                fetch("http://127.0.0.1:8001/analyze-upload",{
+                    method: "POST",
+                    body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                analyzeButton.disabled = false;
+                analyzeButton.textContent = "Analyze Resume";
+
+                console.log(data);
+
+                resultsDiv.innerHTML = `
+                <h3>Match Score: ${data.match_score}%</h3>
+
+                <h4>Strengths</h4>
+                <ul>
+                    ${data.strengths.map(skill => `<li>${skill}</li>`).join("")}
+                </ul>
+
+                <h4>Missing Skills</h4>
+                <ul>
+                    ${data.missing_skills.map(skill => `<li>${skill}</li>`).join("")}
+                </ul>
+
+                <h4>Recommendations</h4>
+                <ul>
+                    ${data.recommendations.map(item => `<li>${item}</li>`).join("")}
+                </ul>
+
+
+                <h4>Match Analysis</h4>
+                <p>${data.match_analysis}</p>
+                `;
+            })
+            .catch(error=>{
+                analyzeButton.disabled = false;
+                analyzeButton.textContent = "Analyze Resume";
+
+                console.error("Error:", error);
+                resultsDiv.innerHTML = "Something went wrong. Please try again.";
+            })
+            });
+        </script>
+    </body>
+</html>
