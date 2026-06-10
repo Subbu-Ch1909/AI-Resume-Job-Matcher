@@ -127,7 +127,7 @@
                 analyzeButton.disabled = true;
                 analyzeButton.textContent = "Analyzing...";
                 
-                fetch("http://127.0.0.1:8001/analyze-upload",{
+                fetch("https://ai-resume-matcher-api.onrender.com/analyze-upload",{
                     method: "POST",
                     body: formData
             })
