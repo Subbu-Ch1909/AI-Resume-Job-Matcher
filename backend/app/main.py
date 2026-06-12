@@ -7,6 +7,7 @@ import os
 from openai import OpenAI
 import pdfplumber
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 
 env_path = Path(__file__).resolve().parents[1]/ ".env"
@@ -30,9 +31,9 @@ def health_check():
     return{"status": "API is running"}
 
 #defining a route
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root():
-    return{"message":"Welcome-API is running.Go to /docs"}
+    return RedirectResponse(url="/docs")
 
 
 @app.post("/analyze", response_model=AnalyzeResponse)
