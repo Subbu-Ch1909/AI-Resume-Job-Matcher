@@ -127,7 +127,7 @@
                 analyzeButton.disabled = true;
                 analyzeButton.textContent = "Analyzing...";
                 
-                fetch("https://resume-matcher-api-d3axg2dnf0a9a3cp.centralus-01.azurewebsites.net",{
+                fetch("https://resume-matcher-api-d3axg2dnf0a9a3cp.centralus-01.azurewebsites.net/analyze-upload",{
                     method: "POST",
                     body: formData
             })
