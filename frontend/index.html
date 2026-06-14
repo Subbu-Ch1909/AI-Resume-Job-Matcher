@@ -143,17 +143,17 @@
 
                 <h4>Strengths</h4>
                 <ul>
-                    ${data.strengths.map(skill => `<li>${skill}</li>`).join("")}
+                   ${(data.strengths || data.technical_strengths || []).map(skill => `<li>${skill}</li>`).join("")}
                 </ul>
 
                 <h4>Missing Skills</h4>
                 <ul>
-                    ${data.missing_skills.map(skill => `<li>${skill}</li>`).join("")}
+                   ${(data.missing_skills || data.technical_missing_skills || []).map(skill => `<li>${skill}</li>`).join("")}
                 </ul>
 
                 <h4>Recommendations</h4>
                 <ul>
-                    ${data.recommendations.map(item => `<li>${item}</li>`).join("")}
+                    ${(data.recommendations || []).map(item => `<li>${item}</li>`).join("")}
                 </ul>
 
 
