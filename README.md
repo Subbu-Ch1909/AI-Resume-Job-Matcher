@@ -57,31 +57,34 @@ AI Resume Matcher was built to provide a more intelligent evaluation by combinin
 - GitHub Actions (CI/CD)
 
 ##  System Architecture
+
+```text
             User
-        │
-        ▼
+             │
+             ▼
 Render Static Frontend
 (HTML • CSS • JavaScript)
-        │
- HTTPS POST /analyze-upload
-        │
-        ▼
+             │
+   HTTPS POST /analyze-upload
+             │
+             ▼
 Azure App Service
 (FastAPI Backend)
-        │
- ┌──────────────┬──────────────┐
- ▼                             ▼
-Sentence Transformers      OpenAI API
-        │
-        ▼
+             │
+      ┌──────┴──────┐
+      ▼             ▼
+Sentence Transformers    OpenAI API
+             │
+             ▼
 Semantic Matching &
 AI Recommendations
-        │
-        ▼
+             │
+             ▼
 Match Score + Results
-        │
-        ▼
+             │
+             ▼
 User Interface
+```
 
 
 # How it Works
