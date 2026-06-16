@@ -56,7 +56,7 @@ AI Resume Matcher was built to provide a more intelligent evaluation by combinin
 - GitHub
 - GitHub Actions (CI/CD)
 
-## 🏗️ System Architecture
+##  System Architecture
             User
         │
         ▼
